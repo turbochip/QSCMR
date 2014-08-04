@@ -1,0 +1,474 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F1B29A62198FE548008D3B5F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A61198FE548008D3B5F /* Foundation.framework */; };
+		F1B29A64198FE548008D3B5F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A63198FE548008D3B5F /* CoreGraphics.framework */; };
+		F1B29A66198FE548008D3B5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A65198FE548008D3B5F /* UIKit.framework */; };
+		F1B29A6C198FE548008D3B5F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1B29A6A198FE548008D3B5F /* InfoPlist.strings */; };
+		F1B29A6E198FE548008D3B5F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B29A6D198FE548008D3B5F /* main.m */; };
+		F1B29A72198FE548008D3B5F /* qscmAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B29A71198FE548008D3B5F /* qscmAppDelegate.m */; };
+		F1B29A75198FE548008D3B5F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1B29A73198FE548008D3B5F /* Main.storyboard */; };
+		F1B29A78198FE548008D3B5F /* qscmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B29A77198FE548008D3B5F /* qscmViewController.m */; };
+		F1B29A7A198FE548008D3B5F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1B29A79198FE548008D3B5F /* Images.xcassets */; };
+		F1B29A81198FE548008D3B5F /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A80198FE548008D3B5F /* XCTest.framework */; };
+		F1B29A82198FE548008D3B5F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A61198FE548008D3B5F /* Foundation.framework */; };
+		F1B29A83198FE548008D3B5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A65198FE548008D3B5F /* UIKit.framework */; };
+		F1B29A8B198FE548008D3B5F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1B29A89198FE548008D3B5F /* InfoPlist.strings */; };
+		F1B29A8D198FE548008D3B5F /* QSCMRTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B29A8C198FE548008D3B5F /* QSCMRTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F1B29A84198FE548008D3B5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F1B29A56198FE548008D3B5F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F1B29A5D198FE548008D3B5F;
+			remoteInfo = QSCMR;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		F1B29A5E198FE548008D3B5F /* QSCMR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QSCMR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1B29A61198FE548008D3B5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F1B29A63198FE548008D3B5F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		F1B29A65198FE548008D3B5F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		F1B29A69198FE548008D3B5F /* QSCMR-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QSCMR-Info.plist"; sourceTree = "<group>"; };
+		F1B29A6B198FE548008D3B5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F1B29A6D198FE548008D3B5F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F1B29A6F198FE548008D3B5F /* QSCMR-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QSCMR-Prefix.pch"; sourceTree = "<group>"; };
+		F1B29A70198FE548008D3B5F /* qscmAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = qscmAppDelegate.h; sourceTree = "<group>"; };
+		F1B29A71198FE548008D3B5F /* qscmAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = qscmAppDelegate.m; sourceTree = "<group>"; };
+		F1B29A74198FE548008D3B5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F1B29A76198FE548008D3B5F /* qscmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = qscmViewController.h; sourceTree = "<group>"; };
+		F1B29A77198FE548008D3B5F /* qscmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = qscmViewController.m; sourceTree = "<group>"; };
+		F1B29A79198FE548008D3B5F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		F1B29A7F198FE548008D3B5F /* QSCMRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QSCMRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1B29A80198FE548008D3B5F /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		F1B29A88198FE548008D3B5F /* QSCMRTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QSCMRTests-Info.plist"; sourceTree = "<group>"; };
+		F1B29A8A198FE548008D3B5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F1B29A8C198FE548008D3B5F /* QSCMRTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSCMRTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F1B29A5B198FE548008D3B5F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1B29A64198FE548008D3B5F /* CoreGraphics.framework in Frameworks */,
+				F1B29A66198FE548008D3B5F /* UIKit.framework in Frameworks */,
+				F1B29A62198FE548008D3B5F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1B29A7C198FE548008D3B5F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1B29A81198FE548008D3B5F /* XCTest.framework in Frameworks */,
+				F1B29A83198FE548008D3B5F /* UIKit.framework in Frameworks */,
+				F1B29A82198FE548008D3B5F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F1B29A55198FE548008D3B5F = {
+			isa = PBXGroup;
+			children = (
+				F1B29A67198FE548008D3B5F /* QSCMR */,
+				F1B29A86198FE548008D3B5F /* QSCMRTests */,
+				F1B29A60198FE548008D3B5F /* Frameworks */,
+				F1B29A5F198FE548008D3B5F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F1B29A5F198FE548008D3B5F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F1B29A5E198FE548008D3B5F /* QSCMR.app */,
+				F1B29A7F198FE548008D3B5F /* QSCMRTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F1B29A60198FE548008D3B5F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F1B29A61198FE548008D3B5F /* Foundation.framework */,
+				F1B29A63198FE548008D3B5F /* CoreGraphics.framework */,
+				F1B29A65198FE548008D3B5F /* UIKit.framework */,
+				F1B29A80198FE548008D3B5F /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F1B29A67198FE548008D3B5F /* QSCMR */ = {
+			isa = PBXGroup;
+			children = (
+				F1B29A70198FE548008D3B5F /* qscmAppDelegate.h */,
+				F1B29A71198FE548008D3B5F /* qscmAppDelegate.m */,
+				F1B29A73198FE548008D3B5F /* Main.storyboard */,
+				F1B29A76198FE548008D3B5F /* qscmViewController.h */,
+				F1B29A77198FE548008D3B5F /* qscmViewController.m */,
+				F1B29A79198FE548008D3B5F /* Images.xcassets */,
+				F1B29A68198FE548008D3B5F /* Supporting Files */,
+			);
+			path = QSCMR;
+			sourceTree = "<group>";
+		};
+		F1B29A68198FE548008D3B5F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F1B29A69198FE548008D3B5F /* QSCMR-Info.plist */,
+				F1B29A6A198FE548008D3B5F /* InfoPlist.strings */,
+				F1B29A6D198FE548008D3B5F /* main.m */,
+				F1B29A6F198FE548008D3B5F /* QSCMR-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F1B29A86198FE548008D3B5F /* QSCMRTests */ = {
+			isa = PBXGroup;
+			children = (
+				F1B29A8C198FE548008D3B5F /* QSCMRTests.m */,
+				F1B29A87198FE548008D3B5F /* Supporting Files */,
+			);
+			path = QSCMRTests;
+			sourceTree = "<group>";
+		};
+		F1B29A87198FE548008D3B5F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F1B29A88198FE548008D3B5F /* QSCMRTests-Info.plist */,
+				F1B29A89198FE548008D3B5F /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F1B29A5D198FE548008D3B5F /* QSCMR */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1B29A90198FE548008D3B5F /* Build configuration list for PBXNativeTarget "QSCMR" */;
+			buildPhases = (
+				F1B29A5A198FE548008D3B5F /* Sources */,
+				F1B29A5B198FE548008D3B5F /* Frameworks */,
+				F1B29A5C198FE548008D3B5F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QSCMR;
+			productName = QSCMR;
+			productReference = F1B29A5E198FE548008D3B5F /* QSCMR.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F1B29A7E198FE548008D3B5F /* QSCMRTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1B29A93198FE548008D3B5F /* Build configuration list for PBXNativeTarget "QSCMRTests" */;
+			buildPhases = (
+				F1B29A7B198FE548008D3B5F /* Sources */,
+				F1B29A7C198FE548008D3B5F /* Frameworks */,
+				F1B29A7D198FE548008D3B5F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F1B29A85198FE548008D3B5F /* PBXTargetDependency */,
+			);
+			name = QSCMRTests;
+			productName = QSCMRTests;
+			productReference = F1B29A7F198FE548008D3B5F /* QSCMRTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F1B29A56198FE548008D3B5F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = qscm;
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Home;
+				TargetAttributes = {
+					F1B29A7E198FE548008D3B5F = {
+						TestTargetID = F1B29A5D198FE548008D3B5F;
+					};
+				};
+			};
+			buildConfigurationList = F1B29A59198FE548008D3B5F /* Build configuration list for PBXProject "QSCMR" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F1B29A55198FE548008D3B5F;
+			productRefGroup = F1B29A5F198FE548008D3B5F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F1B29A5D198FE548008D3B5F /* QSCMR */,
+				F1B29A7E198FE548008D3B5F /* QSCMRTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F1B29A5C198FE548008D3B5F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1B29A7A198FE548008D3B5F /* Images.xcassets in Resources */,
+				F1B29A6C198FE548008D3B5F /* InfoPlist.strings in Resources */,
+				F1B29A75198FE548008D3B5F /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1B29A7D198FE548008D3B5F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1B29A8B198FE548008D3B5F /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F1B29A5A198FE548008D3B5F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1B29A72198FE548008D3B5F /* qscmAppDelegate.m in Sources */,
+				F1B29A78198FE548008D3B5F /* qscmViewController.m in Sources */,
+				F1B29A6E198FE548008D3B5F /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1B29A7B198FE548008D3B5F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1B29A8D198FE548008D3B5F /* QSCMRTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F1B29A85198FE548008D3B5F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F1B29A5D198FE548008D3B5F /* QSCMR */;
+			targetProxy = F1B29A84198FE548008D3B5F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F1B29A6A198FE548008D3B5F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F1B29A6B198FE548008D3B5F /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		F1B29A73198FE548008D3B5F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F1B29A74198FE548008D3B5F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F1B29A89198FE548008D3B5F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F1B29A8A198FE548008D3B5F /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F1B29A8E198FE548008D3B5F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		F1B29A8F198FE548008D3B5F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F1B29A91198FE548008D3B5F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "QSCMR/QSCMR-Prefix.pch";
+				INFOPLIST_FILE = "QSCMR/QSCMR-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		F1B29A92198FE548008D3B5F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "QSCMR/QSCMR-Prefix.pch";
+				INFOPLIST_FILE = "QSCMR/QSCMR-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		F1B29A94198FE548008D3B5F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/QSCMR.app/QSCMR";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "QSCMR/QSCMR-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "QSCMRTests/QSCMRTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		F1B29A95198FE548008D3B5F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/QSCMR.app/QSCMR";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "QSCMR/QSCMR-Prefix.pch";
+				INFOPLIST_FILE = "QSCMRTests/QSCMRTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F1B29A59198FE548008D3B5F /* Build configuration list for PBXProject "QSCMR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1B29A8E198FE548008D3B5F /* Debug */,
+				F1B29A8F198FE548008D3B5F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1B29A90198FE548008D3B5F /* Build configuration list for PBXNativeTarget "QSCMR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1B29A91198FE548008D3B5F /* Debug */,
+				F1B29A92198FE548008D3B5F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		F1B29A93198FE548008D3B5F /* Build configuration list for PBXNativeTarget "QSCMRTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1B29A94198FE548008D3B5F /* Debug */,
+				F1B29A95198FE548008D3B5F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F1B29A56198FE548008D3B5F /* Project object */;
+}
