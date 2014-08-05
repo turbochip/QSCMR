@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F1921302199053C600B3C966 /* qscmr.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F1921300199053C600B3C966 /* qscmr.xcdatamodeld */; };
+		F1921304199055B000B3C966 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1921303199055B000B3C966 /* CoreData.framework */; };
+		F192130D19905D2800B3C966 /* InspectionDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = F192130C19905D2800B3C966 /* InspectionDetail.m */; };
+		F192131019905D2800B3C966 /* Inspection.m in Sources */ = {isa = PBXBuildFile; fileRef = F192130F19905D2800B3C966 /* Inspection.m */; };
+		F19213161990839C00B3C966 /* qscmAreaPVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F19213151990839C00B3C966 /* qscmAreaPVC.m */; };
 		F1B29A62198FE548008D3B5F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A61198FE548008D3B5F /* Foundation.framework */; };
 		F1B29A64198FE548008D3B5F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A63198FE548008D3B5F /* CoreGraphics.framework */; };
 		F1B29A66198FE548008D3B5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A65198FE548008D3B5F /* UIKit.framework */; };
@@ -21,6 +26,9 @@
 		F1B29A83198FE548008D3B5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A65198FE548008D3B5F /* UIKit.framework */; };
 		F1B29A8B198FE548008D3B5F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1B29A89198FE548008D3B5F /* InfoPlist.strings */; };
 		F1B29A8D198FE548008D3B5F /* QSCMRTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B29A8C198FE548008D3B5F /* QSCMRTests.m */; };
+		F1B29A98199000E3008D3B5F /* qscmInspectionMasterTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B29A97199000E3008D3B5F /* qscmInspectionMasterTVC.m */; };
+		F1B29A9C1990095F008D3B5F /* CCExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B29A9B1990095F008D3B5F /* CCExtras.m */; };
+		F1B29A9F19902949008D3B5F /* qscmInspectionDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B29A9E19902949008D3B5F /* qscmInspectionDetailVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +42,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F1921301199053C600B3C966 /* qscmr.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = qscmr.xcdatamodel; sourceTree = "<group>"; };
+		F1921303199055B000B3C966 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		F192130B19905D2800B3C966 /* InspectionDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InspectionDetail.h; path = QSCMR/InspectionDetail.h; sourceTree = "<group>"; };
+		F192130C19905D2800B3C966 /* InspectionDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InspectionDetail.m; path = QSCMR/InspectionDetail.m; sourceTree = "<group>"; };
+		F192130E19905D2800B3C966 /* Inspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Inspection.h; path = QSCMR/Inspection.h; sourceTree = "<group>"; };
+		F192130F19905D2800B3C966 /* Inspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Inspection.m; path = QSCMR/Inspection.m; sourceTree = "<group>"; };
+		F19213141990839C00B3C966 /* qscmAreaPVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qscmAreaPVC.h; sourceTree = "<group>"; };
+		F19213151990839C00B3C966 /* qscmAreaPVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = qscmAreaPVC.m; sourceTree = "<group>"; };
 		F1B29A5E198FE548008D3B5F /* QSCMR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QSCMR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1B29A61198FE548008D3B5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F1B29A63198FE548008D3B5F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -53,6 +69,12 @@
 		F1B29A88198FE548008D3B5F /* QSCMRTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QSCMRTests-Info.plist"; sourceTree = "<group>"; };
 		F1B29A8A198FE548008D3B5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F1B29A8C198FE548008D3B5F /* QSCMRTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSCMRTests.m; sourceTree = "<group>"; };
+		F1B29A96199000E3008D3B5F /* qscmInspectionMasterTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qscmInspectionMasterTVC.h; sourceTree = "<group>"; };
+		F1B29A97199000E3008D3B5F /* qscmInspectionMasterTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = qscmInspectionMasterTVC.m; sourceTree = "<group>"; };
+		F1B29A9A1990095F008D3B5F /* CCExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCExtras.h; sourceTree = "<group>"; };
+		F1B29A9B1990095F008D3B5F /* CCExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCExtras.m; sourceTree = "<group>"; };
+		F1B29A9D19902949008D3B5F /* qscmInspectionDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qscmInspectionDetailVC.h; sourceTree = "<group>"; };
+		F1B29A9E19902949008D3B5F /* qscmInspectionDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = qscmInspectionDetailVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1921304199055B000B3C966 /* CoreData.framework in Frameworks */,
 				F1B29A64198FE548008D3B5F /* CoreGraphics.framework in Frameworks */,
 				F1B29A66198FE548008D3B5F /* UIKit.framework in Frameworks */,
 				F1B29A62198FE548008D3B5F /* Foundation.framework in Frameworks */,
@@ -82,6 +105,11 @@
 		F1B29A55198FE548008D3B5F = {
 			isa = PBXGroup;
 			children = (
+				F192130E19905D2800B3C966 /* Inspection.h */,
+				F192130F19905D2800B3C966 /* Inspection.m */,
+				F192130B19905D2800B3C966 /* InspectionDetail.h */,
+				F192130C19905D2800B3C966 /* InspectionDetail.m */,
+				F1921300199053C600B3C966 /* qscmr.xcdatamodeld */,
 				F1B29A67198FE548008D3B5F /* QSCMR */,
 				F1B29A86198FE548008D3B5F /* QSCMRTests */,
 				F1B29A60198FE548008D3B5F /* Frameworks */,
@@ -101,6 +129,7 @@
 		F1B29A60198FE548008D3B5F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F1921303199055B000B3C966 /* CoreData.framework */,
 				F1B29A61198FE548008D3B5F /* Foundation.framework */,
 				F1B29A63198FE548008D3B5F /* CoreGraphics.framework */,
 				F1B29A65198FE548008D3B5F /* UIKit.framework */,
@@ -112,13 +141,18 @@
 		F1B29A67198FE548008D3B5F /* QSCMR */ = {
 			isa = PBXGroup;
 			children = (
-				F1B29A70198FE548008D3B5F /* qscmAppDelegate.h */,
-				F1B29A71198FE548008D3B5F /* qscmAppDelegate.m */,
 				F1B29A73198FE548008D3B5F /* Main.storyboard */,
 				F1B29A76198FE548008D3B5F /* qscmViewController.h */,
+				F1B29A991990095F008D3B5F /* ccUtilities */,
 				F1B29A77198FE548008D3B5F /* qscmViewController.m */,
 				F1B29A79198FE548008D3B5F /* Images.xcassets */,
 				F1B29A68198FE548008D3B5F /* Supporting Files */,
+				F1B29A96199000E3008D3B5F /* qscmInspectionMasterTVC.h */,
+				F1B29A97199000E3008D3B5F /* qscmInspectionMasterTVC.m */,
+				F1B29A9D19902949008D3B5F /* qscmInspectionDetailVC.h */,
+				F1B29A9E19902949008D3B5F /* qscmInspectionDetailVC.m */,
+				F19213141990839C00B3C966 /* qscmAreaPVC.h */,
+				F19213151990839C00B3C966 /* qscmAreaPVC.m */,
 			);
 			path = QSCMR;
 			sourceTree = "<group>";
@@ -126,6 +160,8 @@
 		F1B29A68198FE548008D3B5F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F1B29A70198FE548008D3B5F /* qscmAppDelegate.h */,
+				F1B29A71198FE548008D3B5F /* qscmAppDelegate.m */,
 				F1B29A69198FE548008D3B5F /* QSCMR-Info.plist */,
 				F1B29A6A198FE548008D3B5F /* InfoPlist.strings */,
 				F1B29A6D198FE548008D3B5F /* main.m */,
@@ -150,6 +186,15 @@
 				F1B29A89198FE548008D3B5F /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F1B29A991990095F008D3B5F /* ccUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				F1B29A9A1990095F008D3B5F /* CCExtras.h */,
+				F1B29A9B1990095F008D3B5F /* CCExtras.m */,
+			);
+			path = ccUtilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,8 +295,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1B29A9C1990095F008D3B5F /* CCExtras.m in Sources */,
+				F1B29A9F19902949008D3B5F /* qscmInspectionDetailVC.m in Sources */,
 				F1B29A72198FE548008D3B5F /* qscmAppDelegate.m in Sources */,
+				F192130D19905D2800B3C966 /* InspectionDetail.m in Sources */,
+				F1B29A98199000E3008D3B5F /* qscmInspectionMasterTVC.m in Sources */,
+				F1921302199053C600B3C966 /* qscmr.xcdatamodeld in Sources */,
+				F192131019905D2800B3C966 /* Inspection.m in Sources */,
 				F1B29A78198FE548008D3B5F /* qscmViewController.m in Sources */,
+				F19213161990839C00B3C966 /* qscmAreaPVC.m in Sources */,
 				F1B29A6E198FE548008D3B5F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -459,6 +511,7 @@
 				F1B29A92198FE548008D3B5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F1B29A93198FE548008D3B5F /* Build configuration list for PBXNativeTarget "QSCMRTests" */ = {
 			isa = XCConfigurationList;
@@ -467,8 +520,22 @@
 				F1B29A95198FE548008D3B5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F1921300199053C600B3C966 /* qscmr.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F1921301199053C600B3C966 /* qscmr.xcdatamodel */,
+			);
+			currentVersion = F1921301199053C600B3C966 /* qscmr.xcdatamodel */;
+			path = qscmr.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F1B29A56198FE548008D3B5F /* Project object */;
 }

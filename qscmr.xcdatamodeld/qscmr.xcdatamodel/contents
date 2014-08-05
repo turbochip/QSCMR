@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Inspection" representedClassName="Inspection" syncable="YES">
+        <attribute name="area" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="inspectionDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="trackingNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="hasDetails" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InspectionDetail" inverseName="forInspection" inverseEntity="InspectionDetail" syncable="YES"/>
+    </entity>
+    <entity name="InspectionDetail" representedClassName="InspectionDetail" syncable="YES">
+        <attribute name="category" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="complianceComplies" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="complianceCritical" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="complianceMajor" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="complianceMinor" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="complianceNA" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="currentObservations" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="previousObservations" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tridNO" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="forInspection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Inspection" inverseName="hasDetails" inverseEntity="Inspection" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Inspection" positionX="-63" positionY="-18" width="128" height="103"/>
+        <element name="InspectionDetail" positionX="-54" positionY="18" width="128" height="193"/>
+    </elements>
+</model>
