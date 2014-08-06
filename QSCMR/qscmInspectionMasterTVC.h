@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "CCExtras.h"
+#import "qscmAreaPVC.h"
 
-@interface qscmInspectionMasterTVC : UITableViewController <UITableViewDelegate, UITableViewDataSource>
+@interface qscmInspectionMasterTVC : UITableViewController <UITableViewDelegate, UITableViewDataSource, areaPopupDelegate>
 @property (nonatomic,strong) UIManagedDocument *document;
+@property (nonatomic,strong) NSMutableDictionary *transferDictionary;
 
 @end

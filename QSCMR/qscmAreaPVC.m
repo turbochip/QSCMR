@@ -15,6 +15,7 @@
 @end
 
 @implementation qscmAreaPVC
+@synthesize areaPopupDelegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -23,6 +24,12 @@
         // Custom initialization
     }
     return self;
+}
+
+-(NSMutableDictionary *) transferDictionary
+{
+    if(!_transferDictionary) _transferDictionary=[[NSMutableDictionary alloc] init];
+    return _transferDictionary;
 }
 
 - (void)viewDidLoad
@@ -56,15 +63,26 @@
     return [self.areas objectAtIndex:row];
 }
 
-/*
+-(void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    [self.transferDictionary setValue:[self.areas objectAtIndex:row] forKey:@"area"];
+}
+
+-(void) viewWillDisappear:(BOOL)animated
+{
+    [self.areaPopupDelegate popupViewControllerDismissed:self.transferDictionary sender:self];
+    
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    CCLog(@"preparing to segue somewhere");
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
-*/
+
 
 @end

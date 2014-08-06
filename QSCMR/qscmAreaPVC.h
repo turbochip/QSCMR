@@ -7,7 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ccUtilities/CCExtras.h"
+
+@protocol areaPopupDelegate
+-(void) popupViewControllerDismissed:(NSMutableDictionary *)dict sender:(id) sender;
+@end
 
 @interface qscmAreaPVC : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
+{
+    id<areaPopupDelegate> delegate;
+}
+//@property (nonatomic,strong) id myDelegate;
+@property (nonatomic, assign) id<areaPopupDelegate> areaPopupDelegate;
+@property (nonatomic,strong) NSMutableDictionary *transferDictionary;
 
 @end

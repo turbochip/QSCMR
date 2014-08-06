@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ccUtilities/CCExtras.h"
 
-@interface qscmInspectionDetailVC : UIViewController
-@property (weak, nonatomic) IBOutlet UITextField *inspectionTitle;
+@interface qscmInspectionDetailVC : UIViewController <UITextViewDelegate, UICollectionViewDataSource,UICollectionViewDelegate>
+@property (weak, nonatomic) IBOutlet UILabel *inspectionAreaField;
+@property (weak, nonatomic) IBOutlet UILabel *inspectionDateAndTimeField;
+
 
 @end

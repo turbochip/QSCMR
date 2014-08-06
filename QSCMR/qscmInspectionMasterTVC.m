@@ -9,6 +9,7 @@
 #import "qscmInspectionMasterTVC.h"
 #import "qscmInspectionDetailVC.h"
 #import "Inspection.h"
+#import "qscmAreaPVC.h"
 
 @interface qscmInspectionMasterTVC ()
 @property (nonatomic,strong) NSMutableArray *inspections;
@@ -38,6 +39,11 @@
     return _inspections;
 }
 
+-(NSMutableDictionary *) transferDictionary
+{
+    if(!_transferDictionary) _transferDictionary=[[NSMutableDictionary alloc] init];
+    return _transferDictionary;
+}
 
 - (void)viewDidLoad
 {
@@ -55,10 +61,17 @@
 
 -(void) viewDidAppear:(BOOL)animated
 {
-    self.inspections=[self loadInspectionArray].mutableCopy;
-    [self.tableView reloadData];
+    [self refreshTable];
 
 }
+
+-(void) refreshTable
+{
+    self.inspections=[self loadInspectionArray].mutableCopy;
+    [self.tableView reloadData];
+    
+}
+
 
 - (NSArray *) loadInspectionArray
 {
@@ -133,34 +146,78 @@
     if(!index<self.splitViewController.childViewControllers.count) {
         CCLog(@"Index=%d",index);
         dvc=[self.splitViewController.childViewControllers objectAtIndex:index];
-        dvc.inspectionTitle.text=[self.inspections objectAtIndex:indexPath.row];
+        dvc.inspectionAreaField.text=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"area"];
+        NSDateFormatter *dateFormat=[[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"ddMMMyyyy HH:mm:ss z Z"];
+        dvc.inspectionDateAndTimeField.text=[dateFormat stringFromDate:[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"inspectionDate"]];
     }
 }
 
+-(void) addInspection:(NSMutableDictionary *)newInspection
+{
+    Inspection *insp;
+    insp=[NSEntityDescription insertNewObjectForEntityForName:@"Inspection" inManagedObjectContext:self.context];
+    insp.area=[newInspection valueForKey:@"area"];
+    insp.inspectionDate=[newInspection valueForKey:@"inspectionDate"];
+    if(![self.context save:nil])
+        CCLog(@"Error saving inspection");
+  
+}
 
 - (IBAction)toolBarButtonPress:(UIBarButtonItem *)sender
 {
     switch (sender.tag) {
         case 0:{
             //Add inspection
-            Inspection *insp;
             NSMutableDictionary *newInspection=[[NSMutableDictionary alloc] init];
-            [newInspection setValue:[NSString stringWithFormat:@"New Object"] forKey:@"area"];
-            [newInspection setValue:[NSDate date] forKey:@"inspectionDate"];
-            insp=[NSEntityDescription insertNewObjectForEntityForName:@"Inspection" inManagedObjectContext:self.context];
-            insp.area=[NSString stringWithFormat:@"New Object"];
-            insp.inspectionDate=[NSDate date];
-            if(![self.context save:nil])
-                CCLog(@"Error saving inspection");
-            self.inspections=[[self loadInspectionArray] mutableCopy];
-            [self.tableView reloadData];
+            [self addInspection:newInspection];
+            [self refreshTable];
             break;
         }
-        case 1:
+        case 1:{
             //delete inspection
+            if([self.tableView isEditing]) {  // if we are currently editing turn it off
+                CCLog(@"editing is turned on so turn it off");
+                [self.tableView setEditing:NO animated:YES];
+            } else {  // if we aren't editing right now, turn it on.
+                CCLog(@"editing is off so turn it on");
+                [self.tableView setEditing:YES animated:YES];
+            }
             break;
+        }
         default:
             break;
+    }
+}
+
+-(BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+-(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CCLog(@"editing Style %d at indexpath %d",editingStyle,indexPath.row);
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Inspection" inManagedObjectContext:self.context];
+    [fetchRequest setEntity:entity];
+    // Specify criteria for filtering which objects to fetch
+    NSMutableDictionary *deldict=[[NSMutableDictionary alloc] init];
+    deldict=[self.inspections objectAtIndex:indexPath.row];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"area=%@ and inspectionDate=%@", [deldict valueForKey:@"area"], [deldict valueForKey:@"inspectionDate"]];
+    [fetchRequest setFetchLimit:1];
+    [fetchRequest setPredicate:predicate];
+    // Specify how the fetched objects should be sorted
+    fetchRequest.sortDescriptors= nil;
+    NSError *error = nil;
+    NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+    if ((fetchedObjects == nil)||(fetchedObjects.count==0)) {
+        CCLog(@"Error fetching objects");
+    } else {
+        [self.context deleteObject:[fetchedObjects objectAtIndex:0]];
+        CCLog(@"deleting object");
+        [self.context save:nil];
+        [self refreshTable];
     }
 }
 
@@ -169,13 +226,31 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if([segue.destinationViewController isKindOfClass:[qscmInspectionDetailVC class]]) {
-        //qscmInspectionDetailVC *dvc=segue.destinationViewController;
+    if([segue.destinationViewController isKindOfClass:[qscmAreaPVC class]]) {
+        qscmAreaPVC *dvc=segue.destinationViewController;
         CCLog(@"in prepare for segue");
+        [self.transferDictionary setValue:nil forKey:@"area"];
+        dvc.areaPopupDelegate=self;
+        dvc.transferDictionary=self.transferDictionary;
     }
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
 }
 
+- (void)popupViewControllerDismissed:(NSMutableDictionary *)inboundDict sender:(id)sender
+{
+    self.transferDictionary = inboundDict;
+    NSMutableDictionary *newInspection=[[NSMutableDictionary alloc] init];
 
+    [newInspection setValue:[NSString stringWithFormat:@"%@",[inboundDict valueForKey:@"area"]] forKey:@"area"];
+    [newInspection setValue:[NSDate date] forKey:@"inspectionDate"];
+
+    [self addInspection:newInspection];
+    
+    self.inspections=[[self loadInspectionArray] mutableCopy];
+    
+    [self.tableView reloadData];
+    
+    [sender dismissViewControllerAnimated:YES completion:nil];
+    //And there you have it.....
+
+}
 @end
