@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "ccUtilities/CCExtras.h"
+#import <CoreData/CoreData.h>
 
-@interface qscmInspectionDetailVC : UIViewController <UITextViewDelegate, UICollectionViewDataSource,UICollectionViewDelegate>
+@interface qscmInspectionDetailVC : UIViewController <UITextViewDelegate, UICollectionViewDataSource,UICollectionViewDelegate , UISplitViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *inspectionAreaField;
 @property (weak, nonatomic) IBOutlet UILabel *inspectionDateAndTimeField;
-
-
+@property (strong,nonatomic) UIManagedDocument *document;
+@property (strong,nonatomic) NSManagedObjectContext *context;
 @end

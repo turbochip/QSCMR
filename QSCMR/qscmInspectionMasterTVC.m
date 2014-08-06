@@ -10,6 +10,7 @@
 #import "qscmInspectionDetailVC.h"
 #import "Inspection.h"
 #import "qscmAreaPVC.h"
+#import "Categories.h"
 
 @interface qscmInspectionMasterTVC ()
 @property (nonatomic,strong) NSMutableArray *inspections;
@@ -57,6 +58,7 @@
     self.tableView.delegate=self;
     self.tableView.dataSource=self;
     self.context=self.document.managedObjectContext;
+
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -120,7 +122,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"InspectionCell" forIndexPath:indexPath];
-    CCLog(@"inspections[%d]=%@",indexPath.row,[self.inspections objectAtIndex:indexPath.row]);
+    CCLog(@"inspections[%ld]=%@",indexPath.row,[self.inspections objectAtIndex:indexPath.row]);
     cell.textLabel.text=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"area"];
     NSDate *temp=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"inspectionDate"];
     NSDateFormatter *dateFormat=[[NSDateFormatter alloc] init];
@@ -144,7 +146,8 @@
         }
     }
     if(!index<self.splitViewController.childViewControllers.count) {
-        CCLog(@"Index=%d",index);
+        CCLog(@"Index=%ld",(long)index);
+        dvc.context=self.context;
         dvc=[self.splitViewController.childViewControllers objectAtIndex:index];
         dvc.inspectionAreaField.text=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"area"];
         NSDateFormatter *dateFormat=[[NSDateFormatter alloc] init];
@@ -197,7 +200,7 @@
 
 -(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CCLog(@"editing Style %d at indexpath %d",editingStyle,indexPath.row);
+    CCLog(@"editing Style %ld at indexpath %ld",editingStyle,(long)indexPath.row);
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Inspection" inManagedObjectContext:self.context];
     [fetchRequest setEntity:entity];

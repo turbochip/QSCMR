@@ -2,7 +2,7 @@
 //  Inspection.h
 //  QSCMR
 //
-//  Created by Chip Cox on 8/4/14.
+//  Created by Chip Cox on 8/6/14.
 //  Copyright (c) 2014 Home. All rights reserved.
 //
 
@@ -14,8 +14,16 @@
 @interface Inspection : NSManagedObject
 
 @property (nonatomic, retain) NSString * area;
-@property (nonatomic, retain) NSString * trackingNumber;
 @property (nonatomic, retain) NSDate * inspectionDate;
-@property (nonatomic, retain) InspectionDetail *hasDetails;
+@property (nonatomic, retain) NSString * trackingNumber;
+@property (nonatomic, retain) NSSet *hasDetails;
+@end
+
+@interface Inspection (CoreDataGeneratedAccessors)
+
+- (void)addHasDetailsObject:(InspectionDetail *)value;
+- (void)removeHasDetailsObject:(InspectionDetail *)value;
+- (void)addHasDetails:(NSSet *)values;
+- (void)removeHasDetails:(NSSet *)values;
 
 @end

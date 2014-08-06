@@ -9,9 +9,12 @@
 /* Begin PBXBuildFile section */
 		F1921302199053C600B3C966 /* qscmr.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F1921300199053C600B3C966 /* qscmr.xcdatamodeld */; };
 		F1921304199055B000B3C966 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1921303199055B000B3C966 /* CoreData.framework */; };
-		F192130D19905D2800B3C966 /* InspectionDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = F192130C19905D2800B3C966 /* InspectionDetail.m */; };
-		F192131019905D2800B3C966 /* Inspection.m in Sources */ = {isa = PBXBuildFile; fileRef = F192130F19905D2800B3C966 /* Inspection.m */; };
 		F19213161990839C00B3C966 /* qscmAreaPVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F19213151990839C00B3C966 /* qscmAreaPVC.m */; };
+		F1AFF3F11992A553008FDFCC /* qscmInspectionDetailCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1AFF3F01992A553008FDFCC /* qscmInspectionDetailCollectionCell.m */; };
+		F1AFF40C1992AE73008FDFCC /* Inspection.m in Sources */ = {isa = PBXBuildFile; fileRef = F1AFF40B1992AE73008FDFCC /* Inspection.m */; };
+		F1AFF40F1992AE74008FDFCC /* ComplianceStates.m in Sources */ = {isa = PBXBuildFile; fileRef = F1AFF40E1992AE74008FDFCC /* ComplianceStates.m */; };
+		F1AFF4151992AE74008FDFCC /* InspectionDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = F1AFF4141992AE74008FDFCC /* InspectionDetail.m */; };
+		F1AFF4181992B143008FDFCC /* Categories.m in Sources */ = {isa = PBXBuildFile; fileRef = F1AFF4171992B143008FDFCC /* Categories.m */; };
 		F1B29A62198FE548008D3B5F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A61198FE548008D3B5F /* Foundation.framework */; };
 		F1B29A64198FE548008D3B5F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A63198FE548008D3B5F /* CoreGraphics.framework */; };
 		F1B29A66198FE548008D3B5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1B29A65198FE548008D3B5F /* UIKit.framework */; };
@@ -44,12 +47,18 @@
 /* Begin PBXFileReference section */
 		F1921301199053C600B3C966 /* qscmr.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = qscmr.xcdatamodel; sourceTree = "<group>"; };
 		F1921303199055B000B3C966 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		F192130B19905D2800B3C966 /* InspectionDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InspectionDetail.h; path = QSCMR/InspectionDetail.h; sourceTree = "<group>"; };
-		F192130C19905D2800B3C966 /* InspectionDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InspectionDetail.m; path = QSCMR/InspectionDetail.m; sourceTree = "<group>"; };
-		F192130E19905D2800B3C966 /* Inspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Inspection.h; path = QSCMR/Inspection.h; sourceTree = "<group>"; };
-		F192130F19905D2800B3C966 /* Inspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Inspection.m; path = QSCMR/Inspection.m; sourceTree = "<group>"; };
 		F19213141990839C00B3C966 /* qscmAreaPVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qscmAreaPVC.h; sourceTree = "<group>"; };
 		F19213151990839C00B3C966 /* qscmAreaPVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = qscmAreaPVC.m; sourceTree = "<group>"; };
+		F1AFF3EF1992A553008FDFCC /* qscmInspectionDetailCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qscmInspectionDetailCollectionCell.h; sourceTree = "<group>"; };
+		F1AFF3F01992A553008FDFCC /* qscmInspectionDetailCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = qscmInspectionDetailCollectionCell.m; sourceTree = "<group>"; };
+		F1AFF40A1992AE73008FDFCC /* Inspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Inspection.h; path = QSCMR/Inspection.h; sourceTree = "<group>"; };
+		F1AFF40B1992AE73008FDFCC /* Inspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Inspection.m; path = QSCMR/Inspection.m; sourceTree = "<group>"; };
+		F1AFF40D1992AE74008FDFCC /* ComplianceStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComplianceStates.h; path = QSCMR/ComplianceStates.h; sourceTree = "<group>"; };
+		F1AFF40E1992AE74008FDFCC /* ComplianceStates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ComplianceStates.m; path = QSCMR/ComplianceStates.m; sourceTree = "<group>"; };
+		F1AFF4131992AE74008FDFCC /* InspectionDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InspectionDetail.h; path = QSCMR/InspectionDetail.h; sourceTree = "<group>"; };
+		F1AFF4141992AE74008FDFCC /* InspectionDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InspectionDetail.m; path = QSCMR/InspectionDetail.m; sourceTree = "<group>"; };
+		F1AFF4161992B143008FDFCC /* Categories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Categories.h; path = QSCMR/Categories.h; sourceTree = "<group>"; };
+		F1AFF4171992B143008FDFCC /* Categories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Categories.m; path = QSCMR/Categories.m; sourceTree = "<group>"; };
 		F1B29A5E198FE548008D3B5F /* QSCMR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QSCMR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1B29A61198FE548008D3B5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F1B29A63198FE548008D3B5F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -105,11 +114,15 @@
 		F1B29A55198FE548008D3B5F = {
 			isa = PBXGroup;
 			children = (
-				F192130E19905D2800B3C966 /* Inspection.h */,
-				F192130F19905D2800B3C966 /* Inspection.m */,
-				F192130B19905D2800B3C966 /* InspectionDetail.h */,
-				F192130C19905D2800B3C966 /* InspectionDetail.m */,
 				F1921300199053C600B3C966 /* qscmr.xcdatamodeld */,
+				F1AFF4161992B143008FDFCC /* Categories.h */,
+				F1AFF4171992B143008FDFCC /* Categories.m */,
+				F1AFF40A1992AE73008FDFCC /* Inspection.h */,
+				F1AFF40B1992AE73008FDFCC /* Inspection.m */,
+				F1AFF40D1992AE74008FDFCC /* ComplianceStates.h */,
+				F1AFF40E1992AE74008FDFCC /* ComplianceStates.m */,
+				F1AFF4131992AE74008FDFCC /* InspectionDetail.h */,
+				F1AFF4141992AE74008FDFCC /* InspectionDetail.m */,
 				F1B29A67198FE548008D3B5F /* QSCMR */,
 				F1B29A86198FE548008D3B5F /* QSCMRTests */,
 				F1B29A60198FE548008D3B5F /* Frameworks */,
@@ -153,6 +166,8 @@
 				F1B29A9E19902949008D3B5F /* qscmInspectionDetailVC.m */,
 				F19213141990839C00B3C966 /* qscmAreaPVC.h */,
 				F19213151990839C00B3C966 /* qscmAreaPVC.m */,
+				F1AFF3EF1992A553008FDFCC /* qscmInspectionDetailCollectionCell.h */,
+				F1AFF3F01992A553008FDFCC /* qscmInspectionDetailCollectionCell.m */,
 			);
 			path = QSCMR;
 			sourceTree = "<group>";
@@ -295,15 +310,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1AFF40C1992AE73008FDFCC /* Inspection.m in Sources */,
 				F1B29A9C1990095F008D3B5F /* CCExtras.m in Sources */,
 				F1B29A9F19902949008D3B5F /* qscmInspectionDetailVC.m in Sources */,
+				F1AFF40F1992AE74008FDFCC /* ComplianceStates.m in Sources */,
 				F1B29A72198FE548008D3B5F /* qscmAppDelegate.m in Sources */,
-				F192130D19905D2800B3C966 /* InspectionDetail.m in Sources */,
 				F1B29A98199000E3008D3B5F /* qscmInspectionMasterTVC.m in Sources */,
+				F1AFF3F11992A553008FDFCC /* qscmInspectionDetailCollectionCell.m in Sources */,
 				F1921302199053C600B3C966 /* qscmr.xcdatamodeld in Sources */,
-				F192131019905D2800B3C966 /* Inspection.m in Sources */,
+				F1AFF4181992B143008FDFCC /* Categories.m in Sources */,
 				F1B29A78198FE548008D3B5F /* qscmViewController.m in Sources */,
 				F19213161990839C00B3C966 /* qscmAreaPVC.m in Sources */,
+				F1AFF4151992AE74008FDFCC /* InspectionDetail.m in Sources */,
 				F1B29A6E198FE548008D3B5F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
