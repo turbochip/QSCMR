@@ -12,6 +12,14 @@
 #import "Inspection.h"
 #import "InspectionDetail.h"
 
+#define CATEGORY_FIELD 0
+#define COMPLIANCE_HIGH_LEVEL_STATE 1
+#define COMPLIANCE_NONCOMPLIANCE_STATE 2
+#define TRID_NUMBER 3
+#define PREVIOUS_OBSERVATIONS 4
+#define CURRENT_OBSERVATIONS 5
+#define NOTAPPLICABLE 99
+
 @interface qscmInspectionDetailVC ()
 @property (weak, nonatomic) IBOutlet UIToolbar *detailToolbar;
 @property (nonatomic,strong) NSMutableArray *data;
@@ -188,8 +196,109 @@
 
 }
 
+//#define CATEGORY_FIELD 0
+//#define COMPLIANCEHIGHLEVELSTATE 1
+//#define COMPLIANCENONCOMPLIANCESTATE 2
+//#define TRIDNUMBER 3
+//#define PREVIOUSOBSERVATIONS 4
+//#define CURRENTOBSERVATIONS 5
+//#define NOTAPPLICABLE 99
+
+
 - (IBAction)saveDetailCell:(UIButton *)sender {
     //Save detail collection cell to database
+    NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
+    for(UIView *sv in sender.superview.subviews) {
+        CCLog(@"sv.tag=%d",sv.tag);
+        switch(sv.tag) {
+            case CATEGORY_FIELD: {
+                [saveDict setValue:((UILabel *)sv).text forKey:@"CATEGORY_FIELD"];
+                break;
+            }
+            case COMPLIANCE_HIGH_LEVEL_STATE :{
+                [saveDict setValue:[((UISegmentedControl *)sv) titleForSegmentAtIndex:((UISegmentedControl *) sv).selectedSegmentIndex] forKey:@"COMPLIANCE_HIGH_LEVEL_STATE"];
+                break;
+            }
+            case COMPLIANCE_NONCOMPLIANCE_STATE: {
+                [saveDict setValue:[((UISegmentedControl *)sv) titleForSegmentAtIndex:((UISegmentedControl *) sv).selectedSegmentIndex] forKey:@"COMPLIANCE_NONCOMPLIANCE_STATE"];
+                break;
+            }
+            case TRID_NUMBER :{
+                [saveDict setValue:((UITextField *)sv).text forKey:@"TRID_NUMBER"];
+                break;
+            }
+            case PREVIOUS_OBSERVATIONS :{
+                [saveDict setValue:((UITextView *)sv).text forKey:@"PREVIOUS_OBSERVATIONS"];
+                break;
+            }
+            case CURRENT_OBSERVATIONS :{
+                [saveDict setValue:((UITextView *)sv).text forKey:@"CURRENT_OBSERVATIONS"];
+                break;
+            }
+            case NOTAPPLICABLE : {
+                CCLog(@"Skip subview");
+                break;
+            }
+            default: {
+                CCLog(@"unknown tag type %@",sv);
+            }
+        }
+    }
+    if([[saveDict valueForKey:@"COMPLIANCE_HIGH_LEVEL_STATE"] isEqualToString:@"Non-Compliant"]) {
+        [saveDict setValue:[saveDict valueForKey:@"COMPLIANCE_NONCOMPLIANCE_STATE"] forKey:@"COMPLIANCE_STATE"];
+    } else {
+        [saveDict setValue:[saveDict valueForKey:@"COMPLIANCE_HIGH_LEVEL_STATE"] forKey:@"COMPLIANCE_STATE"];
+    }
+    
+    [saveDict setValue:self.inspectionTrackingNumber.text forKey:@"TRACKING_NUMBER"];
+    [saveDict setValue:self.inspectionAreaField.text forKey:@"INSPECTION_AREA"];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"ddMMMyyyy HH:mm:ss z Z"];
+    NSDate *date = [dateFormat dateFromString:self.inspectionDateAndTimeField.text];
+    [saveDict setValue:date forKey:@"INSPECTION_DATE"];
+    
+    CCLog(@"saveDict=%@",saveDict);
+    [self saveInspectionDetail:saveDict toContext:self.context];
+}
+
+- (void)saveInspectionDetail:(NSMutableDictionary*) dict toContext:(NSManagedObjectContext *) context
+{
+    InspectionDetail *inspD;
+    inspD=[NSEntityDescription insertNewObjectForEntityForName:@"InspectionDetail" inManagedObjectContext:context];
+    inspD.previousObservations= [dict valueForKey:@"PREVIOUS_OBSERVATIONS"];
+    inspD.currentObservations=[dict valueForKey:@"CURRENT_OBSERVATIONS"];
+    inspD.complianceState=[dict valueForKey:@"COMPLIANCE_STATE"];
+
+    NSFetchRequest *fr=[[NSFetchRequest alloc] initWithEntityName:@"Categories"];
+    fr.predicate=[NSPredicate predicateWithFormat:@"categoryName=%@",[dict valueForKey:@"CATEGORY_FIELD"]];
+    fr.sortDescriptors=nil;
+    NSArray *rs=[context executeFetchRequest:fr error:nil];
+    
+    if((rs==nil) || (rs.count==0)) {
+        CCLog(@"Could not find category %@",[dict valueForKey:@"CATEGORY_FIELD"]);
+    } else {
+        inspD.isForCategory=[rs firstObject];
+    }
+    fr=nil;
+    rs=nil;
+    
+    fr=[[NSFetchRequest alloc] initWithEntityName:@"Inspection"];
+    fr.predicate=[NSPredicate predicateWithFormat:@"trackingNumber=%@",[dict valueForKey:@"TRACKING_NUMBER" ]];
+    fr.sortDescriptors=nil;
+    rs=[context executeFetchRequest:fr error:nil];
+    
+    if((rs==nil) || (rs.count==0)) {
+        CCLog(@"Could not find inspection %@",[dict valueForKey:@"TRACKING_NUMBER"]);
+    } else {
+        CCLog(@"Found rs.firstObject=%@",rs.firstObject);
+        inspD.forInspection=[rs firstObject];
+    }
+   
+    
+    
+    if(![self.context save:nil])
+        CCLog(@"Error saving inspection");
+
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView

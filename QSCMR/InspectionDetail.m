@@ -2,13 +2,12 @@
 //  InspectionDetail.m
 //  QSCMR
 //
-//  Created by Chip Cox on 8/6/14.
+//  Created by Chip Cox on 8/7/14.
 //  Copyright (c) 2014 Home. All rights reserved.
 //
 
 #import "InspectionDetail.h"
 #import "Categories.h"
-#import "ComplianceStates.h"
 #import "Inspection.h"
 
 
@@ -17,8 +16,8 @@
 @dynamic currentObservations;
 @dynamic previousObservations;
 @dynamic tridNO;
-@dynamic forInspection;
 @dynamic complianceState;
+@dynamic forInspection;
 @dynamic isForCategory;
 
 @end

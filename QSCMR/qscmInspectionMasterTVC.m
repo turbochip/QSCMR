@@ -70,6 +70,7 @@
 -(void) refreshTable
 {
     self.inspections=[self loadInspectionArray].mutableCopy;
+    CCLog(@"self.inspections=%@",self.inspections);
     [self.tableView reloadData];
     
 }
@@ -95,6 +96,8 @@
     if ((fetchedObjects == nil)||(fetchedObjects.count==0)) {
         CCLog(@"Error no fetched objects");
     }
+    for(Inspection *d in fetchedObjects)
+        CCLog(@"fetchedObjects=%@",d.area);
     return fetchedObjects;
 }
 
@@ -123,7 +126,9 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"InspectionCell" forIndexPath:indexPath];
     CCLog(@"inspections[%ld]=%@",(long)indexPath.row,[self.inspections objectAtIndex:indexPath.row]);
-    cell.textLabel.text=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"area"];
+    NSString *tempstr=[NSString stringWithFormat:@"%@ : ",[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"area" ]];
+    [tempstr stringByAppendingString:[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"trackingNumber"]];
+    cell.textLabel.text=tempstr;
     NSDate *temp=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"inspectionDate"];
     NSDateFormatter *dateFormat=[[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"(EEEE) ddMMMyyyy HH:mm:ss z Z"];
@@ -151,15 +156,22 @@
     NSDateFormatter *dateFormat=[[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"ddMMMyyyy HH:mm:ss z Z"];
     dvc.inspectionDateAndTimeField.text=[dateFormat stringFromDate:[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"inspectionDate"]];
+    dvc.inspectionTrackingNumber.text=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"trackingNumber"];
     [dvc.collectionView reloadData];
 }
 
 -(void) addInspection:(NSMutableDictionary *)newInspection
 {
+    NSFetchRequest *fr=[[NSFetchRequest alloc] initWithEntityName:@"Inspection"];
+    fr.predicate=nil;
+    fr.sortDescriptors=nil;
+    NSInteger noInspections=[self.context countForFetchRequest:fr error:nil];
+    
     Inspection *insp;
     insp=[NSEntityDescription insertNewObjectForEntityForName:@"Inspection" inManagedObjectContext:self.context];
     insp.area=[newInspection valueForKey:@"area"];
     insp.inspectionDate=[newInspection valueForKey:@"inspectionDate"];
+    insp.trackingNumber=[NSString stringWithFormat:@"INSP%d",noInspections];
     if(![self.context save:nil])
         CCLog(@"Error saving inspection");
   
