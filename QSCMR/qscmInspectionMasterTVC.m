@@ -122,7 +122,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"InspectionCell" forIndexPath:indexPath];
-    CCLog(@"inspections[%ld]=%@",indexPath.row,[self.inspections objectAtIndex:indexPath.row]);
+    CCLog(@"inspections[%ld]=%@",(long)indexPath.row,[self.inspections objectAtIndex:indexPath.row]);
     cell.textLabel.text=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"area"];
     NSDate *temp=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"inspectionDate"];
     NSDateFormatter *dateFormat=[[NSDateFormatter alloc] init];
@@ -140,20 +140,18 @@
     NSInteger index=0;
     CCLog(@"selected %@",[self.inspections objectAtIndex:indexPath.row]);
     CCLog(@"childviewcontrollers=%@",self.splitViewController.childViewControllers);
-    for(index=0;index<self.splitViewController.childViewControllers.count;index++) {
-        if([[self.splitViewController.childViewControllers objectAtIndex:index] isKindOfClass:[qscmInspectionDetailVC class]]) {
-            break;
-        }
-    }
-    if(!index<self.splitViewController.childViewControllers.count) {
-        CCLog(@"Index=%ld",(long)index);
-        dvc.context=self.context;
-        dvc=[self.splitViewController.childViewControllers objectAtIndex:index];
-        dvc.inspectionAreaField.text=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"area"];
-        NSDateFormatter *dateFormat=[[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"ddMMMyyyy HH:mm:ss z Z"];
-        dvc.inspectionDateAndTimeField.text=[dateFormat stringFromDate:[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"inspectionDate"]];
-    }
+    
+    dvc=[self.splitViewController.childViewControllers lastObject];
+    if([dvc isKindOfClass:[UINavigationController class]])
+        dvc=[dvc.childViewControllers lastObject];
+    
+    CCLog(@"Index=%ld",(long)index);
+    dvc.context=self.context;
+    dvc.inspectionAreaField.text=[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"area"];
+    NSDateFormatter *dateFormat=[[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"ddMMMyyyy HH:mm:ss z Z"];
+    dvc.inspectionDateAndTimeField.text=[dateFormat stringFromDate:[[self.inspections objectAtIndex:indexPath.row] valueForKey:@"inspectionDate"]];
+    [dvc.collectionView reloadData];
 }
 
 -(void) addInspection:(NSMutableDictionary *)newInspection
@@ -200,7 +198,7 @@
 
 -(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CCLog(@"editing Style %ld at indexpath %ld",editingStyle,(long)indexPath.row);
+    CCLog(@"editing Style %d at indexpath %ld",editingStyle,(long)indexPath.row);
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Inspection" inManagedObjectContext:self.context];
     [fetchRequest setEntity:entity];

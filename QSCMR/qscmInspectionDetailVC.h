@@ -15,4 +15,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *inspectionDateAndTimeField;
 @property (strong,nonatomic) UIManagedDocument *document;
 @property (strong,nonatomic) NSManagedObjectContext *context;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @end

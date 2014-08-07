@@ -9,12 +9,13 @@
 #import "qscmInspectionDetailVC.h"
 #import "qscmInspectionDetailCollectionCell.h"
 #import "Categories.h"
+#import "Inspection.h"
+#import "InspectionDetail.h"
 
 @interface qscmInspectionDetailVC ()
 @property (weak, nonatomic) IBOutlet UIToolbar *detailToolbar;
 @property (nonatomic,strong) NSMutableArray *data;
 @property (nonatomic,strong) NSMutableArray *categoriesArray;
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @end
 
 @implementation qscmInspectionDetailVC
@@ -67,8 +68,6 @@
     self.inspectionAreaField.layer.cornerRadius=12;
     self.inspectionDateAndTimeField.layer.borderWidth=1;
     self.inspectionDateAndTimeField.layer.cornerRadius=12;
-    for(int i=0;i<21;i++)
-        self.data[i]=[@"abcdefghijklmnopqrstuvwxyz" substringFromIndex:i];
     [self.collectionView setDelegate:self];
     [self.collectionView setDataSource:self];
     self.context=self.document.managedObjectContext;
@@ -119,6 +118,40 @@
     [self.collectionView reloadData];
 }
 
+- (NSMutableDictionary *)loadCellDataForInspection:(NSString *)inspection Category:(NSString *)category
+{
+    NSMutableDictionary *insDict=[[NSMutableDictionary alloc] init];
+
+    if(![inspection isEqualToString:@""]) {
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Inspection" inManagedObjectContext:self.context];
+        [fetchRequest setEntity:entity];
+        // Specify criteria for filtering which objects to fetch
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"ddMMMyyyy HH:mm:ss z Z"];
+        NSDate *date = [dateFormat dateFromString:self.inspectionDateAndTimeField.text];
+
+    //    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"area=%@ and hasDetails.forCategories.categoryName=%@ inspectionDate=%@", inspection, category,date];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SUBQUERY(hasDetails,$d,SUBQUERY($d.isForCategory,$c,$c.categoryName=%@).@count>0).@count>0 and area=%@ and inspectionDate=%@",category,inspection,date];
+        [fetchRequest setPredicate:predicate];
+        // Specify how the fetched objects should be sorted
+        //NSSortDescriptor *sortDescriptor = nil;
+        [fetchRequest setSortDescriptors:nil];
+        
+        NSError *error = nil;
+        NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+        if ((fetchedObjects == nil) || (fetchedObjects.count==0)) {
+            CCLog(@"Unable to fetch inspection data");
+        } else {
+            [insDict setObject:[fetchedObjects[0] valueForKey:@"area"] forKey:@"area"];
+            [insDict setObject:[fetchedObjects[0] valueForKeyPath:@"hasDetails.previousObservations"] forKey:@"previousObservations"];
+            [insDict setObject:[fetchedObjects[0] valueForKeyPath:@"hasDetails.currentObservations"] forKey:@"currentObservations"];
+        }
+    }
+    return insDict;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -137,12 +170,12 @@
 
 -( qscmInspectionDetailCollectionCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cellData = [self.data objectAtIndex:indexPath.row];
+    NSMutableDictionary *cellDict=[self loadCellDataForInspection:self.inspectionAreaField.text Category:[self.categoriesArray objectAtIndex:indexPath.row] ];
     
     qscmInspectionDetailCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"inspectionCell" forIndexPath:indexPath];
     cell.categoryLabel.text=[self.categoriesArray objectAtIndex:indexPath.row];
-    cell.previousObservationTextBox.text=cellData;
-    cell.currentObservationsTextBox.text=[NSString stringWithFormat:@"currnet observations %@",cellData ];
+    cell.previousObservationTextBox.text=[cellDict valueForKey:@"previousObservations"];
+    cell.currentObservationsTextBox.text=[cellDict valueForKey:@"currentObservations"];
     if(cell.segmentControlHighLevelState.selectedSegmentIndex==3) {
         cell.segmentControlNonCompliance.enabled=YES;
     } else {
@@ -154,17 +187,6 @@
     return cell;
 
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
@@ -186,6 +208,7 @@
 
 - (BOOL) splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation
 {
+    [self.collectionView reloadData];
     return UIInterfaceOrientationIsPortrait(orientation);
 }
 
@@ -206,11 +229,13 @@
 //    [self.toolbarItems.firstObject addObject: barButtonItem];
     
     self.navigationItem.leftBarButtonItem=barButtonItem;
+    [self.collectionView reloadData];
 }
 
 -(void) splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
 {
     self.navigationItem.leftBarButtonItem=nil;
+    [self.collectionView reloadData];
 }
 - (IBAction)segmentIsSelected:(UISegmentedControl *)sender {
 }
