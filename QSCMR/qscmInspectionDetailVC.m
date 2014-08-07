@@ -188,6 +188,10 @@
 
 }
 
+- (IBAction)saveDetailCell:(UIButton *)sender {
+    //Save detail collection cell to database
+}
+
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     if ([textView.text isEqualToString:@"placeholder text here..."]) {
