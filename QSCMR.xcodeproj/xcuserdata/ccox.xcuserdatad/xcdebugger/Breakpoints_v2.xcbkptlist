@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QSCMR/qscmInspectionDetailVC.m"
-            timestampString = "429160666.210545"
+            timestampString = "429194637.240832"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "347"
-            endingLineNumber = "347"
+            startingLineNumber = "357"
+            endingLineNumber = "357"
             landmarkName = "-saveInspectionDetail:toContext:"
             landmarkType = "5">
          </BreakpointContent>

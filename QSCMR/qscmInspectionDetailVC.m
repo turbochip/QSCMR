@@ -204,10 +204,14 @@
             NSString *compState=[insDict valueForKey:@"complianceState"];
             if([compState isEqualToString:@"N/A"]) {
                 CCLog(@"N/A");
+                [insDict setObject:@1 forKey:@"complianceHighLevelState"];
             } else {
                if([compState isEqualToString:@"Complies"]) {
                    CCLog(@"complies");
+                   [insDict setObject:@0 forKey:@"complianceHighLevelState"];
                } else {
+                   //Everything else should be non-compliant at the high level so set hight level and start checking details
+                    [insDict setObject:@2 forKey:@"complianceHighLevelState"];
                    if([compState isEqualToString:@"Non-Compliant"]) {
                        CCLog(@"Non-Compliant");
                        // We should never get here because instead of a state of Non-Compliant, we would have
@@ -215,12 +219,15 @@
                    } else {
                        if([compState isEqualToString:@"Minor"]) {
                            CCLog(@"Minor");
+                           [insDict setObject:@0 forKey:@"complianceNonComplianceState"];
                        } else {
                            if([compState isEqualToString:@"Major"]) {
                                CCLog(@"Major");
+                               [insDict setObject:@1 forKey:@"complianceNonComplanceState"];
                            } else {
                                if([compState isEqualToString:@"Critical"]) {
                                    CCLog(@"Critical");
+                                   [insDict setObject:@2 forKey:@"complianceNonComplianceState"];
                                } else {
                                    CCLog(@"unknown");
                                }
@@ -254,6 +261,9 @@
     cell.categoryLabel.text=[self.categoriesArray objectAtIndex:indexPath.row];
     cell.previousObservationTextBox.text=[cellDict valueForKey:@"previousObservations"];
     cell.currentObservationsTextBox.text=[cellDict valueForKey:@"currentObservations"];
+    CCLog(@"highlevelstate=%d",[[cellDict valueForKey:@"complianceHighLevelState"] integerValue]);
+    [cell.segmentControlHighLevelState setSelectedSegmentIndex:[[cellDict valueForKey:@"complianceHighLevelState"] integerValue]];
+    [cell.segmentControlNonCompliance setSelectedSegmentIndex:[[cellDict valueForKey:@"complianceNonComplianceState"] integerValue]];
     if(cell.segmentControlHighLevelState.selectedSegmentIndex==3) {
         cell.segmentControlNonCompliance.enabled=YES;
     } else {
