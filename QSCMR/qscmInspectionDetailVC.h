@@ -16,5 +16,5 @@
 @property (strong,nonatomic) UIManagedDocument *document;
 @property (strong,nonatomic) NSManagedObjectContext *context;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (weak, nonatomic) IBOutlet UITextField *inspectionTrackingNumber;
+@property (weak, nonatomic) IBOutlet UILabel *inspectionTrackingNumber;
 @end

@@ -12,6 +12,7 @@
 #import "Inspection.h"
 #import "InspectionDetail.h"
 
+//collection cell fields and their tag
 #define CATEGORY_FIELD 0
 #define COMPLIANCE_HIGH_LEVEL_STATE 1
 #define COMPLIANCE_NONCOMPLIANCE_STATE 2
@@ -28,21 +29,7 @@
 
 @implementation qscmInspectionDetailVC
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void) awakeFromNib
-{
-    self.splitViewController.delegate=self;
-
-}
-
+#pragma mark Getters
 -(NSManagedObjectContext *) context
 {
     if(!_context) _context=self.document.managedObjectContext;
@@ -67,105 +54,187 @@
     return _data;
 }
 
+#pragma mark Screen Control
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void) awakeFromNib
+{
+    //we are the delegate to handle the split view controller.
+    self.splitViewController.delegate=self;
+}
+
+#define BORDER_WIDTH 1
+#define CORNER_RADIUS 6
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    CCLog(@"in view did load");
-    self.inspectionAreaField.layer.borderWidth=1;
-    self.inspectionAreaField.layer.cornerRadius=12;
-    self.inspectionDateAndTimeField.layer.borderWidth=1;
-    self.inspectionDateAndTimeField.layer.cornerRadius=12;
+    // All of these are labels to enforce them as readonly
+    self.inspectionAreaField.layer.borderWidth=BORDER_WIDTH;
+    self.inspectionAreaField.layer.cornerRadius=CORNER_RADIUS;
+    self.inspectionDateAndTimeField.layer.borderWidth=BORDER_WIDTH;
+    self.inspectionDateAndTimeField.layer.cornerRadius=CORNER_RADIUS;
+    self.inspectionTrackingNumber.layer.borderWidth=BORDER_WIDTH;
+    self.inspectionTrackingNumber.layer.cornerRadius=CORNER_RADIUS;
+    
+    self.context=self.document.managedObjectContext;
+    
     [self.collectionView setDelegate:self];
     [self.collectionView setDataSource:self];
-    self.context=self.document.managedObjectContext;
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
-    NSFetchRequest *fetchRequest=[[NSFetchRequest alloc] initWithEntityName:@"Categories"];
-    NSSortDescriptor *seqSort=[[NSSortDescriptor alloc] initWithKey:@"displaySequence" ascending:YES];
-    fetchRequest.sortDescriptors=@[seqSort];
-    fetchRequest.predicate=Nil;
-    NSError *error = nil;
-    NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+    // Load the categories into an array
+    NSMutableArray *fetchedObjects=[[NSMutableArray alloc] init];
+    fetchedObjects=[[self loadCategoriesInToArrayFromContext: self.context] mutableCopy];
     if ((fetchedObjects == nil)||(fetchedObjects.count==0)) {
-        if(fetchedObjects.count==0){
-            CCLog(@"zero category records found");
-            NSArray *catArray=@[@{@"category":@"Training",@"displaySequence":@0},
-                                @{@"category":@"Process/Procedure/PackagingRecord/Test Standard Detail",@"displaySequence":@1},
-                                @{@"category":@"Compliance to Procedure/Standard/Packaging Record",@"displaySequence":@2},
-                                @{@"category":@"Good DocumentationPractices",@"displaySequence":@3},
-                                @{@"category":@"Gowning/Hygiene",@"displaySequence":@4},
-                                @{@"category":@"Facilities/Maintenance",@"displaySequence":@5},
-                                @{@"category":@"General Housekeeping",@"displaySequence":@6},
-                                @{@"category":@"Validation/Qualification",@"displaySequence":@7},
-                                @{@"category":@"Calibration",@"displaySequence":@8},
-                                @{@"category":@"Laboratory Controls/Sample Control",@"displaySequence":@9},
-                                @{@"category":@"Investigations",@"displaySequence":@10},
-                                @{@"category":@"Change Control",@"displaySequence":@11},
-                                @{@"category":@"Material Handling",@"displaySequence":@12},
-                                @{@"category":@"Safety",@"displaySequence":@13}];
-            
-            for(NSDictionary *catDict in catArray) {
-                Categories *cat =[NSEntityDescription insertNewObjectForEntityForName:@"Categories" inManagedObjectContext:self.context];
-                cat.categoryName=[catDict objectForKey:@"category"];
-                cat.displaySequence=[catDict objectForKey:@"displaySequence"];
-            }
-            [self.context save:nil];
-           
+        if(fetchedObjects.count==0){  // No records found in database so initialize the database.
+            CCLog(@"zero category records found initialize database");
+            fetchedObjects=[[self initializeCategoriesEntityInContext:self.context] mutableCopy];
         } else {
             CCLog(@"Error fetching objects");
         }
-    } else {
-        for(Categories *cat in fetchedObjects) {
-            [self.categoriesArray addObject:cat.categoryName];
-        }
     }
     
+    for(Categories *cat in fetchedObjects) {
+        [self.categoriesArray addObject:cat.categoryName];
+    }
+    //reload the collection view with the categories filled in.
     [self.collectionView reloadData];
 }
 
+- (NSArray *) loadCategoriesInToArrayFromContext:(NSManagedObjectContext *)context
+{
+    NSFetchRequest *fetchRequest=[[NSFetchRequest alloc] initWithEntityName:@"Categories"];
+    NSSortDescriptor *seqSort=[[NSSortDescriptor alloc] initWithKey:@"displaySequence" ascending:YES];
+    fetchRequest.sortDescriptors=@[seqSort];
+    fetchRequest.predicate=Nil;  //Get them all
+    NSError *error = nil;
+    NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+    if(fetchedObjects==nil) CCLog(@"Error fetching Categories - %@",error);
+    return fetchedObjects;
+}
+
+- (NSArray *) initializeCategoriesEntityInContext:(NSManagedObjectContext *)context
+{
+    // Build an array of dictionaries.  Each dictionary has the category name and the display sequence.
+    NSArray *catArray=@[@{@"category":@"Training",@"displaySequence":@0},
+                        @{@"category":@"Process/Procedure/PackagingRecord/Test Standard Detail",@"displaySequence":@1},
+                        @{@"category":@"Compliance to Procedure/Standard/Packaging Record",@"displaySequence":@2},
+                        @{@"category":@"Good DocumentationPractices",@"displaySequence":@3},
+                        @{@"category":@"Gowning/Hygiene",@"displaySequence":@4},
+                        @{@"category":@"Facilities/Maintenance",@"displaySequence":@5},
+                        @{@"category":@"General Housekeeping",@"displaySequence":@6},
+                        @{@"category":@"Validation/Qualification",@"displaySequence":@7},
+                        @{@"category":@"Calibration",@"displaySequence":@8},
+                        @{@"category":@"Laboratory Controls/Sample Control",@"displaySequence":@9},
+                        @{@"category":@"Investigations",@"displaySequence":@10},
+                        @{@"category":@"Change Control",@"displaySequence":@11},
+                        @{@"category":@"Material Handling",@"displaySequence":@12},
+                        @{@"category":@"Safety",@"displaySequence":@13}];
+    
+    // load everything into the entity
+    for(NSDictionary *catDict in catArray) {
+        // for each dictionary in the array we just built, add an object to the categories entity
+        Categories *cat =[NSEntityDescription insertNewObjectForEntityForName:@"Categories" inManagedObjectContext:context];
+        cat.categoryName=[catDict objectForKey:@"category"];
+        cat.displaySequence=[catDict objectForKey:@"displaySequence"];
+    }
+    // commit the inserts
+    [self.context save:nil];
+    
+    // now that we have initialized the entity populated, load them into the array using the same code as earlier.
+    NSArray *fetchedObjects=[self loadCategoriesInToArrayFromContext:context];
+    return fetchedObjects;
+}
+
+- (NSArray *)fetchInspection:(NSString *)inspection DataForCategory:(NSString *)category FromContext:(NSManagedObjectContext*) context
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Categories" inManagedObjectContext:self.context];
+    [fetchRequest setEntity:entity];
+    // Specify criteria for filtering which objects to fetch
+//    NSString *pred=[NSString stringWithFormat:@"SUBQUERY(hasDetails,$d,SUBQUERY($d.isForCategory,$c,$c.categoryName='%@').@count>0).@count>0 and trackingNumber='%@'",category,self.inspectionTrackingNumber.text];
+    NSString *pred=[NSString stringWithFormat:@"SUBQUERY(hasInspections,$d,SUBQUERY($d.forInspection,$i,$i.trackingNumber='%@').@count>0).@count>0 and categoryName='%@'",self.inspectionTrackingNumber.text,category];
+    CCLog(@"pred=%@",pred);
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:pred];
+    [fetchRequest setPredicate:predicate];
+    [fetchRequest setSortDescriptors:nil];
+    
+    NSError *error = nil;
+    NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+    if ((fetchedObjects == nil) || (fetchedObjects.count==0)) {
+        CCLog(@"Unable to fetch inspection data");
+    } else {
+        CCLog(@"fetchedObjects complianceState=%@",[fetchedObjects[0] valueForKeyPath:@"hasInspections.complianceState"]);
+    }
+    return fetchedObjects;
+}
+
+// pull up all the data for the inspection we have chosen.
 - (NSMutableDictionary *)loadCellDataForInspection:(NSString *)inspection Category:(NSString *)category
 {
     NSMutableDictionary *insDict=[[NSMutableDictionary alloc] init];
-
+    
+    // don't do this if we haven't selected an inspection yet.
     if(![inspection isEqualToString:@""]) {
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Inspection" inManagedObjectContext:self.context];
-        [fetchRequest setEntity:entity];
-        // Specify criteria for filtering which objects to fetch
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"ddMMMyyyy HH:mm:ss z Z"];
-        NSDate *date = [dateFormat dateFromString:self.inspectionDateAndTimeField.text];
-
-    //    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"area=%@ and hasDetails.forCategories.categoryName=%@ inspectionDate=%@", inspection, category,date];
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SUBQUERY(hasDetails,$d,SUBQUERY($d.isForCategory,$c,$c.categoryName=%@).@count>0).@count>0 and area=%@ and inspectionDate=%@",category,inspection,date];
-        [fetchRequest setPredicate:predicate];
-        // Specify how the fetched objects should be sorted
-        //NSSortDescriptor *sortDescriptor = nil;
-        [fetchRequest setSortDescriptors:nil];
-        
-        NSError *error = nil;
-        NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+        NSArray *fetchedObjects=[self fetchInspection:inspection DataForCategory:category FromContext:self.context];
         if ((fetchedObjects == nil) || (fetchedObjects.count==0)) {
             CCLog(@"Unable to fetch inspection data");
         } else {
-            [insDict setObject:[fetchedObjects[0] valueForKey:@"area"] forKey:@"area"];
-            [insDict setObject:[fetchedObjects[0] valueForKeyPath:@"hasDetails.previousObservations"] forKey:@"previousObservations"];
-            [insDict setObject:[fetchedObjects[0] valueForKeyPath:@"hasDetails.currentObservations"] forKey:@"currentObservations"];
+            [insDict setObject:[[fetchedObjects[0] valueForKeyPath:@"hasInspections.forInspection.area"] anyObject] forKey:@"area"];
+            [insDict setObject:[[fetchedObjects[0] valueForKeyPath:@"hasInspections.forInspection.trackingNumber"] anyObject] forKey:@"trackingNumber"];
+            [insDict setObject:[[fetchedObjects[0] valueForKeyPath:@"hasInspections.forInspection.inspectionDate"] anyObject] forKey:@"inspectionDate"];
+            [insDict setObject:[[fetchedObjects[0] valueForKeyPath:@"hasInspections.previousObservations"] anyObject  ]forKey:@"previousObservations"];
+            [insDict setObject:[[fetchedObjects[0] valueForKeyPath:@"hasInspections.currentObservations"] anyObject  ]forKey:@"currentObservations"];
+            [insDict setObject:[[fetchedObjects[0] valueForKeyPath:@"hasInspections.tridNO"] anyObject] forKey:@"tridNO"];
+            [insDict setObject:[[fetchedObjects[0] valueForKeyPath:@"hasInspections.forCategory.categoryName"] anyObject] forKey:@"categoryName"];
+            //compliance state is the result of looking at the two segment controls.  It represents the combined state
+            [insDict setObject:[[fetchedObjects[0] valueForKeyPath:@"hasInspections.complianceState"] anyObject] forKey:@"complianceState"];
+            //in here we need to have both states so we can set the segment controls so we need to break them appart.
+            CCLog(@"compstate=%@",[insDict valueForKey:@"complianceState"]);
+            NSString *compState=[insDict valueForKey:@"complianceState"];
+            if([compState isEqualToString:@"N/A"]) {
+                CCLog(@"N/A");
+            } else {
+               if([compState isEqualToString:@"Complies"]) {
+                   CCLog(@"complies");
+               } else {
+                   if([compState isEqualToString:@"Non-Compliant"]) {
+                       CCLog(@"Non-Compliant");
+                       // We should never get here because instead of a state of Non-Compliant, we would have
+                       // stored the non-compliant state.
+                   } else {
+                       if([compState isEqualToString:@"Minor"]) {
+                           CCLog(@"Minor");
+                       } else {
+                           if([compState isEqualToString:@"Major"]) {
+                               CCLog(@"Major");
+                           } else {
+                               if([compState isEqualToString:@"Critical"]) {
+                                   CCLog(@"Critical");
+                               } else {
+                                   CCLog(@"unknown");
+                               }
+                           }
+                       }
+                   }
+               }
+            }
         }
     }
     return insDict;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
+#pragma mark Collection Control
 -(NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
@@ -176,6 +245,7 @@
     return self.categoriesArray.count;
 }
 
+// qscmInspectionDetailCollectionCell  is the class that controls the prototype cells in the collection
 -( qscmInspectionDetailCollectionCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSMutableDictionary *cellDict=[self loadCellDataForInspection:self.inspectionAreaField.text Category:[self.categoriesArray objectAtIndex:indexPath.row] ];
@@ -195,15 +265,6 @@
     return cell;
 
 }
-
-//#define CATEGORY_FIELD 0
-//#define COMPLIANCEHIGHLEVELSTATE 1
-//#define COMPLIANCENONCOMPLIANCESTATE 2
-//#define TRIDNUMBER 3
-//#define PREVIOUSOBSERVATIONS 4
-//#define CURRENTOBSERVATIONS 5
-//#define NOTAPPLICABLE 99
-
 
 - (IBAction)saveDetailCell:(UIButton *)sender {
     //Save detail collection cell to database
