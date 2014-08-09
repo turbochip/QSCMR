@@ -111,6 +111,166 @@
     [self.collectionView reloadData];
 }
 
+
+#pragma mark Collection Control
+-(NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+-(NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.categoriesArray.count;
+}
+
+// qscmInspectionDetailCollectionCell  is the class that controls the prototype cells in the collection
+-( qscmInspectionDetailCollectionCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSMutableDictionary *cellDict=[self loadCellDataForInspection:self.inspectionAreaField.text Category:[self.categoriesArray objectAtIndex:indexPath.row] ];
+    
+    qscmInspectionDetailCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"inspectionCell" forIndexPath:indexPath];
+    cell.categoryLabel.text=@"";
+    cell.categoryLabel.text=[self.categoriesArray objectAtIndex:indexPath.row];
+    cell.previousObservationTextBox.text=@"";
+    cell.previousObservationTextBox.text=[cellDict valueForKey:@"previousObservations"];
+    cell.currentObservationsTextBox.text=@"";
+    cell.currentObservationsTextBox.text=[cellDict valueForKey:@"currentObservations"];
+    CCLog(@"highlevelstate=%d",[[cellDict valueForKey:@"complianceHighLevelState"] integerValue]);
+    [cell.segmentControlHighLevelState setSelectedSegmentIndex:[[cellDict valueForKey:@"complianceHighLevelState"] integerValue]];
+    [cell.segmentControlNonCompliance setSelectedSegmentIndex:[[cellDict valueForKey:@"complianceNonComplianceState"] integerValue]];
+    if(cell.segmentControlHighLevelState.selectedSegmentIndex==2) {
+        cell.segmentControlNonCompliance.enabled=YES;
+        if(cell.segmentControlNonCompliance.selectedSegmentIndex==2) {
+            cell.tridNumberTextField.text=@"";
+            cell.tridNumberTextField.text=[cellDict valueForKey:@"tridNO"];
+        }
+    } else {
+        [cell.segmentControlNonCompliance setSelectedSegmentIndex:UISegmentedControlNoSegment];
+        cell.tridNumberTextField.text=@"";
+        cell.segmentControlNonCompliance.enabled=NO;
+    }
+
+    cell.layer.borderWidth=1;
+    
+    return cell;
+
+}
+
+//save the information for the detail cell you are in.
+- (IBAction)saveDetailCell:(UIButton *)sender {
+    //Save detail collection cell to database
+    NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
+    for(UIView *sv in sender.superview.subviews) {
+        CCLog(@"sv.tag=%d",sv.tag);
+        switch(sv.tag) {
+            case CATEGORY_FIELD: {
+                [saveDict setValue:((UILabel *)sv).text forKey:@"CATEGORY_FIELD"];
+                break;
+            }
+            case COMPLIANCE_HIGH_LEVEL_STATE :{
+                [saveDict setValue:[((UISegmentedControl *)sv) titleForSegmentAtIndex:((UISegmentedControl *) sv).selectedSegmentIndex] forKey:@"COMPLIANCE_HIGH_LEVEL_STATE"];
+                break;
+            }
+            case COMPLIANCE_NONCOMPLIANCE_STATE: {
+                [saveDict setValue:[((UISegmentedControl *)sv) titleForSegmentAtIndex:((UISegmentedControl *) sv).selectedSegmentIndex] forKey:@"COMPLIANCE_NONCOMPLIANCE_STATE"];
+                break;
+            }
+            case TRID_NUMBER :{
+                [saveDict setValue:((UITextField *)sv).text forKey:@"TRID_NUMBER"];
+                break;
+            }
+            case PREVIOUS_OBSERVATIONS :{
+                [saveDict setValue:((UITextView *)sv).text forKey:@"PREVIOUS_OBSERVATIONS"];
+                break;
+            }
+            case CURRENT_OBSERVATIONS :{
+                [saveDict setValue:((UITextView *)sv).text forKey:@"CURRENT_OBSERVATIONS"];
+                break;
+            }
+            case NOTAPPLICABLE : {
+                CCLog(@"Skip subview");
+                break;
+            }
+            default: {
+                CCLog(@"unknown tag type %@",sv);
+            }
+        }
+    }
+    // The compliance information is in two controls on the screen, but we only want to store the
+    // resulting state in the database so based on the two controls, set the actual state.
+    if([[saveDict valueForKey:@"COMPLIANCE_HIGH_LEVEL_STATE"] isEqualToString:@"Non-Compliant"]) {
+        [saveDict setValue:[saveDict valueForKey:@"COMPLIANCE_NONCOMPLIANCE_STATE"] forKey:@"COMPLIANCE_STATE"];
+    } else {
+        [saveDict setValue:[saveDict valueForKey:@"COMPLIANCE_HIGH_LEVEL_STATE"] forKey:@"COMPLIANCE_STATE"];
+    }
+    
+    [saveDict setValue:self.inspectionTrackingNumber.text forKey:@"TRACKING_NUMBER"];
+    [saveDict setValue:self.inspectionAreaField.text forKey:@"INSPECTION_AREA"];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"ddMMMyyyy HH:mm:ss z Z"];
+    NSDate *date = [dateFormat dateFromString:self.inspectionDateAndTimeField.text];
+    [saveDict setValue:date forKey:@"INSPECTION_DATE"];
+    
+    CCLog(@"saveDict=%@",saveDict);
+    [self saveInspectionDetail:saveDict toContext:self.context];
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@"placeholder text here..."]) {
+        textView.text = @"";
+        textView.textColor = [UIColor blackColor]; //optional
+    }
+    [textView becomeFirstResponder];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@""]) {
+        textView.text = @"placeholder text here...";
+        textView.textColor = [UIColor lightGrayColor]; //optional
+    }
+    [textView resignFirstResponder];
+}
+
+#pragma mark Split View Controller methods
+
+- (BOOL) splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation
+{
+    [self.collectionView reloadData];
+    return UIInterfaceOrientationIsPortrait(orientation);
+}
+
+-(void) splitViewController:(UISplitViewController *)svc
+     willHideViewController:(UIViewController *)aViewController
+          withBarButtonItem:(UIBarButtonItem *)barButtonItem
+       forPopoverController:(UIPopoverController *)pc
+{
+    if(aViewController.title)
+        barButtonItem.title=aViewController.title;
+    else
+        barButtonItem.title=@"Show Menu";
+    
+    [barButtonItem setWidth:40.0];
+    CCLog(@"barbuttonItem=%f",barButtonItem.width);
+    
+    CCLog(@"toolbarItems=%@",self.navigationItem.leftBarButtonItem);
+//    [self.toolbarItems.firstObject addObject: barButtonItem];
+    
+    self.navigationItem.leftBarButtonItem=barButtonItem;
+    [self.collectionView reloadData];
+}
+
+-(void) splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
+{
+    self.navigationItem.leftBarButtonItem=nil;
+    [self.collectionView reloadData];
+}
+- (IBAction)segmentIsSelected:(UISegmentedControl *)sender {
+}
+
+#pragma mark SQL Calls
+
 - (NSArray *) loadCategoriesInToArrayFromContext:(NSManagedObjectContext *)context
 {
     NSFetchRequest *fetchRequest=[[NSFetchRequest alloc] initWithEntityName:@"Categories"];
@@ -162,7 +322,7 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Categories" inManagedObjectContext:self.context];
     [fetchRequest setEntity:entity];
     // Specify criteria for filtering which objects to fetch
-//    NSString *pred=[NSString stringWithFormat:@"SUBQUERY(hasDetails,$d,SUBQUERY($d.isForCategory,$c,$c.categoryName='%@').@count>0).@count>0 and trackingNumber='%@'",category,self.inspectionTrackingNumber.text];
+    //    NSString *pred=[NSString stringWithFormat:@"SUBQUERY(hasDetails,$d,SUBQUERY($d.isForCategory,$c,$c.categoryName='%@').@count>0).@count>0 and trackingNumber='%@'",category,self.inspectionTrackingNumber.text];
     NSString *pred=[NSString stringWithFormat:@"SUBQUERY(hasInspections,$d,SUBQUERY($d.forInspection,$i,$i.trackingNumber='%@').@count>0).@count>0 and categoryName='%@'",self.inspectionTrackingNumber.text,category];
     CCLog(@"pred=%@",pred);
     NSPredicate *predicate = [NSPredicate predicateWithFormat:pred];
@@ -206,223 +366,122 @@
                 CCLog(@"N/A");
                 [insDict setObject:@1 forKey:@"complianceHighLevelState"];
             } else {
-               if([compState isEqualToString:@"Complies"]) {
-                   CCLog(@"complies");
-                   [insDict setObject:@0 forKey:@"complianceHighLevelState"];
-               } else {
-                   //Everything else should be non-compliant at the high level so set hight level and start checking details
+                if([compState isEqualToString:@"Complies"]) {
+                    CCLog(@"complies");
+                    [insDict setObject:@0 forKey:@"complianceHighLevelState"];
+                } else {
+                    //Everything else should be non-compliant at the high level so set hight level and start checking details
                     [insDict setObject:@2 forKey:@"complianceHighLevelState"];
-                   if([compState isEqualToString:@"Non-Compliant"]) {
-                       CCLog(@"Non-Compliant");
-                       // We should never get here because instead of a state of Non-Compliant, we would have
-                       // stored the non-compliant state.
-                   } else {
-                       if([compState isEqualToString:@"Minor"]) {
-                           CCLog(@"Minor");
-                           [insDict setObject:@0 forKey:@"complianceNonComplianceState"];
-                       } else {
-                           if([compState isEqualToString:@"Major"]) {
-                               CCLog(@"Major");
-                               [insDict setObject:@1 forKey:@"complianceNonComplanceState"];
-                           } else {
-                               if([compState isEqualToString:@"Critical"]) {
-                                   CCLog(@"Critical");
-                                   [insDict setObject:@2 forKey:@"complianceNonComplianceState"];
-                               } else {
-                                   CCLog(@"unknown");
-                               }
-                           }
-                       }
-                   }
-               }
+                    if([compState isEqualToString:@"Non-Compliant"]) {
+                        CCLog(@"Non-Compliant");
+                        // We should never get here because instead of a state of Non-Compliant, we would have
+                        // stored the non-compliant state.
+                    } else {
+                        if([compState isEqualToString:@"Minor"]) {
+                            CCLog(@"Minor");
+                            [insDict setObject:@0 forKey:@"complianceNonComplianceState"];
+                        } else {
+                            if([compState isEqualToString:@"Major"]) {
+                                CCLog(@"Major");
+                                [insDict setObject:@1 forKey:@"complianceNonComplanceState"];
+                            } else {
+                                if([compState isEqualToString:@"Critical"]) {
+                                    CCLog(@"Critical");
+                                    [insDict setObject:@2 forKey:@"complianceNonComplianceState"];
+                                } else {
+                                    CCLog(@"unknown");
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
     return insDict;
 }
 
-#pragma mark Collection Control
--(NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+- (void)saveInspectionDetail:(NSMutableDictionary*) dict toContext:(NSManagedObjectContext *) context
 {
-    return 1;
-}
-
--(NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return self.categoriesArray.count;
-}
-
-// qscmInspectionDetailCollectionCell  is the class that controls the prototype cells in the collection
--( qscmInspectionDetailCollectionCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSMutableDictionary *cellDict=[self loadCellDataForInspection:self.inspectionAreaField.text Category:[self.categoriesArray objectAtIndex:indexPath.row] ];
-    
-    qscmInspectionDetailCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"inspectionCell" forIndexPath:indexPath];
-    cell.categoryLabel.text=[self.categoriesArray objectAtIndex:indexPath.row];
-    cell.previousObservationTextBox.text=[cellDict valueForKey:@"previousObservations"];
-    cell.currentObservationsTextBox.text=[cellDict valueForKey:@"currentObservations"];
-    CCLog(@"highlevelstate=%d",[[cellDict valueForKey:@"complianceHighLevelState"] integerValue]);
-    [cell.segmentControlHighLevelState setSelectedSegmentIndex:[[cellDict valueForKey:@"complianceHighLevelState"] integerValue]];
-    [cell.segmentControlNonCompliance setSelectedSegmentIndex:[[cellDict valueForKey:@"complianceNonComplianceState"] integerValue]];
-    if(cell.segmentControlHighLevelState.selectedSegmentIndex==3) {
-        cell.segmentControlNonCompliance.enabled=YES;
+    NSFetchRequest *fr;
+    InspectionDetail *inspD;
+    CCLog(@"tracking Number=%@",[dict valueForKey:@"TRACKING_NUMBER"]);
+    CCLog(@"CATEGORY_FIELD=%@",[dict valueForKey:@"CATEGORY_FIELD"]);
+//    fr=[[NSFetchRequest alloc] initWithEntityName:@"InspectionDetail"];
+//    fr.predicate=[NSPredicate predicateWithFormat:@"forInspection.trackingNumber=%@ and isForCategory=%@",  [dict valueForKey:@"TRACKING_NUMBER" ], [dict valueForKey:@"CATEGORY_FIELD"]];
+    fr=[[NSFetchRequest alloc] initWithEntityName:@"Categories"];
+    fr.predicate=[NSPredicate predicateWithFormat:@"SUBQUERY(hasInspections, $i, SUBQUERY($i.forInspection,$d,$d.trackingNumber=%@).@count>0).@count>0 and categoryName=%@",[dict valueForKey:@"TRACKING_NUMBER"],[dict valueForKey:@"CATEGORY_FIELD"]];
+    fr.sortDescriptors=nil;
+    NSArray *rs=[context executeFetchRequest:fr error:nil];
+    if(rs==nil) {
+        CCLog(@"Error unable to execute fetch for matching records");
     } else {
-        cell.segmentControlNonCompliance.enabled=NO;
-    }
-
-    cell.layer.borderWidth=1;
-    
-    return cell;
-
-}
-
-- (IBAction)saveDetailCell:(UIButton *)sender {
-    //Save detail collection cell to database
-    NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
-    for(UIView *sv in sender.superview.subviews) {
-        CCLog(@"sv.tag=%d",sv.tag);
-        switch(sv.tag) {
-            case CATEGORY_FIELD: {
-                [saveDict setValue:((UILabel *)sv).text forKey:@"CATEGORY_FIELD"];
-                break;
-            }
-            case COMPLIANCE_HIGH_LEVEL_STATE :{
-                [saveDict setValue:[((UISegmentedControl *)sv) titleForSegmentAtIndex:((UISegmentedControl *) sv).selectedSegmentIndex] forKey:@"COMPLIANCE_HIGH_LEVEL_STATE"];
-                break;
-            }
-            case COMPLIANCE_NONCOMPLIANCE_STATE: {
-                [saveDict setValue:[((UISegmentedControl *)sv) titleForSegmentAtIndex:((UISegmentedControl *) sv).selectedSegmentIndex] forKey:@"COMPLIANCE_NONCOMPLIANCE_STATE"];
-                break;
-            }
-            case TRID_NUMBER :{
-                [saveDict setValue:((UITextField *)sv).text forKey:@"TRID_NUMBER"];
-                break;
-            }
-            case PREVIOUS_OBSERVATIONS :{
-                [saveDict setValue:((UITextView *)sv).text forKey:@"PREVIOUS_OBSERVATIONS"];
-                break;
-            }
-            case CURRENT_OBSERVATIONS :{
-                [saveDict setValue:((UITextView *)sv).text forKey:@"CURRENT_OBSERVATIONS"];
-                break;
-            }
-            case NOTAPPLICABLE : {
-                CCLog(@"Skip subview");
-                break;
-            }
-            default: {
-                CCLog(@"unknown tag type %@",sv);
+        if(rs.count==0) {
+            CCLog(@"No Rows Found add new record");
+            inspD=[NSEntityDescription insertNewObjectForEntityForName:@"InspectionDetail" inManagedObjectContext:context];
+            inspD.previousObservations= [dict valueForKey:@"PREVIOUS_OBSERVATIONS"];
+            inspD.currentObservations=[dict valueForKey:@"CURRENT_OBSERVATIONS"];
+            inspD.complianceState=[dict valueForKey:@"COMPLIANCE_STATE"];
+            inspD.isForCategory=[[self getCategoryRecordForCategory:[dict valueForKey:@"CATEGORY_FIELD"] inContext:context] firstObject];
+            inspD.forInspection=[[self getInspectionRecordForTrackingNumber:[dict valueForKey:@"TRACKING_NUMBER"] inContext:context] firstObject];
+        } else {  // we already have records so update it
+            CCLog(@"Row already exists update it");
+            NSFetchRequest *fr1=[[NSFetchRequest alloc] initWithEntityName:@"InspectionDetail"];
+            fr1.predicate=[NSPredicate predicateWithFormat:@"forInspection.trackingNumber=%@ and isForCategory.categoryName=%@",[dict valueForKey:@"TRACKING_NUMBER"], [dict valueForKey:@"CATEGORY_FIELD"]];
+            fr1.sortDescriptors=nil;
+            NSArray *rs1=[context executeFetchRequest:fr1 error:nil];
+            if(rs1==nil) {
+                CCLog(@"Error opening InspectionDetail for TrackingNo:%@",[dict valueForKey:@"TRACKING_NUMBER"]);
+            } else {
+                if(rs1.count==1) {
+                    inspD=[rs1 firstObject];
+                    CCLog(@"inspD=%@",inspD);
+                    inspD.previousObservations= [dict valueForKey:@"PREVIOUS_OBSERVATIONS"];
+                    inspD.currentObservations=[dict valueForKey:@"CURRENT_OBSERVATIONS"];
+                    inspD.complianceState=[dict valueForKey:@"COMPLIANCE_STATE"];
+                } else {
+                    CCLog(@"Somehow we have more than one record for %@:%@",[dict valueForKey:@"TRACKING_NUMBER"],[dict valueForKey:@"CATEGORY_FIELD"]);
+                }
             }
         }
     }
-    if([[saveDict valueForKey:@"COMPLIANCE_HIGH_LEVEL_STATE"] isEqualToString:@"Non-Compliant"]) {
-        [saveDict setValue:[saveDict valueForKey:@"COMPLIANCE_NONCOMPLIANCE_STATE"] forKey:@"COMPLIANCE_STATE"];
-    } else {
-        [saveDict setValue:[saveDict valueForKey:@"COMPLIANCE_HIGH_LEVEL_STATE"] forKey:@"COMPLIANCE_STATE"];
-    }
     
-    [saveDict setValue:self.inspectionTrackingNumber.text forKey:@"TRACKING_NUMBER"];
-    [saveDict setValue:self.inspectionAreaField.text forKey:@"INSPECTION_AREA"];
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"ddMMMyyyy HH:mm:ss z Z"];
-    NSDate *date = [dateFormat dateFromString:self.inspectionDateAndTimeField.text];
-    [saveDict setValue:date forKey:@"INSPECTION_DATE"];
+    if(![self.context save:nil])
+        CCLog(@"Error saving inspection");
     
-    CCLog(@"saveDict=%@",saveDict);
-    [self saveInspectionDetail:saveDict toContext:self.context];
 }
 
-- (void)saveInspectionDetail:(NSMutableDictionary*) dict toContext:(NSManagedObjectContext *) context
+-(InspectionDetail *) getInspectionDetailForInspectionTrackingNumber:(NSString *) trkNum andCategory:(NSString *)category onContext:(NSManagedObjectContext*) context
 {
-    InspectionDetail *inspD;
-    inspD=[NSEntityDescription insertNewObjectForEntityForName:@"InspectionDetail" inManagedObjectContext:context];
-    inspD.previousObservations= [dict valueForKey:@"PREVIOUS_OBSERVATIONS"];
-    inspD.currentObservations=[dict valueForKey:@"CURRENT_OBSERVATIONS"];
-    inspD.complianceState=[dict valueForKey:@"COMPLIANCE_STATE"];
+//    fr=[[NSFetchRequest alloc] initWithEntityName:@"InspectionDetail"];
+//    fr.predicate=[NSPredicate predicateWithFormat:@"forInspection.trackingNumber=%@ and isForCategory=%@",  [dict valueForKey:@"TRACKING_NUMBER" ], [dict valueForKey:@"CATEGORY_FIELD"]];
+    return nil;
+}
 
+- (NSArray *)getCategoryRecordForCategory:(NSString *)category inContext:(NSManagedObjectContext *)context
+{
     NSFetchRequest *fr=[[NSFetchRequest alloc] initWithEntityName:@"Categories"];
-    fr.predicate=[NSPredicate predicateWithFormat:@"categoryName=%@",[dict valueForKey:@"CATEGORY_FIELD"]];
+    fr.predicate=[NSPredicate predicateWithFormat:@"categoryName=%@",category];
     fr.sortDescriptors=nil;
     NSArray *rs=[context executeFetchRequest:fr error:nil];
     
     if((rs==nil) || (rs.count==0)) {
-        CCLog(@"Could not find category %@",[dict valueForKey:@"CATEGORY_FIELD"]);
-    } else {
-        inspD.isForCategory=[rs firstObject];
+        CCLog(@"Could not find category %@",category);
     }
-    fr=nil;
-    rs=nil;
-    
-    fr=[[NSFetchRequest alloc] initWithEntityName:@"Inspection"];
-    fr.predicate=[NSPredicate predicateWithFormat:@"trackingNumber=%@",[dict valueForKey:@"TRACKING_NUMBER" ]];
+    return rs;
+}
+
+-(NSArray *)getInspectionRecordForTrackingNumber:(NSString *)trackingNumber inContext:(NSManagedObjectContext *)context
+{
+    NSFetchRequest *fr=[[NSFetchRequest alloc] initWithEntityName:@"Inspection"];
+    fr.predicate=[NSPredicate predicateWithFormat:@"trackingNumber=%@",trackingNumber];
     fr.sortDescriptors=nil;
-    rs=[context executeFetchRequest:fr error:nil];
-    
+    NSArray *rs=[context executeFetchRequest:fr error:nil];
+
     if((rs==nil) || (rs.count==0)) {
-        CCLog(@"Could not find inspection %@",[dict valueForKey:@"TRACKING_NUMBER"]);
-    } else {
-        CCLog(@"Found rs.firstObject=%@",rs.firstObject);
-        inspD.forInspection=[rs firstObject];
+        CCLog(@"Could not find inspection %@",trackingNumber);
     }
-   
-    
-    
-    if(![self.context save:nil])
-        CCLog(@"Error saving inspection");
-
+    return rs;
 }
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    if ([textView.text isEqualToString:@"placeholder text here..."]) {
-        textView.text = @"";
-        textView.textColor = [UIColor blackColor]; //optional
-    }
-    [textView becomeFirstResponder];
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-    if ([textView.text isEqualToString:@""]) {
-        textView.text = @"placeholder text here...";
-        textView.textColor = [UIColor lightGrayColor]; //optional
-    }
-    [textView resignFirstResponder];
-}
-
-- (BOOL) splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation
-{
-    [self.collectionView reloadData];
-    return UIInterfaceOrientationIsPortrait(orientation);
-}
-
--(void) splitViewController:(UISplitViewController *)svc
-     willHideViewController:(UIViewController *)aViewController
-          withBarButtonItem:(UIBarButtonItem *)barButtonItem
-       forPopoverController:(UIPopoverController *)pc
-{
-    if(aViewController.title)
-        barButtonItem.title=aViewController.title;
-    else
-        barButtonItem.title=@"Show Menu";
-    
-    [barButtonItem setWidth:40.0];
-    CCLog(@"barbuttonItem=%f",barButtonItem.width);
-    
-    CCLog(@"toolbarItems=%@",self.navigationItem.leftBarButtonItem);
-//    [self.toolbarItems.firstObject addObject: barButtonItem];
-    
-    self.navigationItem.leftBarButtonItem=barButtonItem;
-    [self.collectionView reloadData];
-}
-
--(void) splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
-{
-    self.navigationItem.leftBarButtonItem=nil;
-    [self.collectionView reloadData];
-}
-- (IBAction)segmentIsSelected:(UISegmentedControl *)sender {
-}
-
 
 @end
